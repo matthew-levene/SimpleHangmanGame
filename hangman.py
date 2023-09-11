@@ -5,7 +5,8 @@ class Hangman:
     def __init__(self, word):
         self.word = word
 
+    def contains(self, letter):
+        return letter in self.word
 
-def generate_word():
-    words = ["London", "Warsaw", "Texas", "Paris", "Amsterdam", "Belgium", "Toronto"]
-    return random.choice(words)
+    def guess(self, guess_word):
+        return guess_word in self.word

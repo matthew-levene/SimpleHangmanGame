@@ -6,58 +6,84 @@
 #
 # The progress of the hangman will depend on the number of word length
 # e.g. the more characters in the word, the longer it takes to draw.
-from hangman import Hangman, generate_word
+from hangman import Hangman
+from generator import generate_word
+from validator import find_matches
 
 if __name__ == '__main__':
     print(
         """
-        Welcome to Hangman!
+    Welcome to Hangman!
         
-        Our hangman friend has committed a crime in a renown capital city.
-        In order to save him, you must find out which city he committed the crime in
-        """
+    Our hangman friend has committed a crime in a renown capital city.
+    In order to save him, you must find out which city he committed the crime in"""
     )
 
     game_round = 0
 
-    word = generate_word()
+    word = generate_word().upper()
 
     hangman = Hangman(word)
 
     guess_placeholder = "_"
-    user_guessed_word = guess_placeholder * len(word)
+
+    user_guessed_word_list = []
+    user_guessed_word = ""
     letters_guessed = []
 
+    sorted_word = ""
+    correctly_guessed_word_map = {
+        x: [] for x in word
+    }
+
     # While the round is less than the word times by 2
-    max_round = len(word) * 2
-    while game_round < max_round:
+    max_rounds = len(word) * 2
+    while game_round < max_rounds:
 
         # Get the input from the user
-        letter = input("Which letter?: ")
+        letter = input(
+            """
+    Which letter?: """
+        ).upper()
 
-        # For each letter at given index
-        for letter_index in range(len(word)):
+        user_guessed_word += letter
 
-            # If letter is found at given index, update user guessed word
-            if letter in word[letter_index] and letter not in letters_guessed:
-                letters_guessed.append(letter)
-                # Iterate over letters guessed list, if the letter is not in there, enter the user_guessed_work loop
-                # for each index in user_guessed_word find out if letter at word index is same as
-                for index in range(len(user_guessed_word)):
-                    if letter == word[index]:
-                        print("MATCHING LETTER", letter)
-                        user_guessed_word = user_guessed_word.replace(guess_placeholder, letter, 1)
-                        print("USER GUESSED WORD", user_guessed_word)
-                        break
+        if not hangman.contains(letter):
+            print(
+                """
+    Letter {} was not found""".format(letter))
+        else:
+            # For each letter at given index
+            for letter_index in range(len(word)):
+                # If letter is found at given index and letter has not been previously guessed
+                if hangman.contains(letter) and letter not in letters_guessed:
+                    letters_guessed.append(letter)
+                    # For each index in the word
+                    find_matches(letter, word, correctly_guessed_word_map)
 
-            # print("PRINTING WORD IN FOR: ", word[letter_index])
+            # sort the map
+            sorted_list = []
+            for key in correctly_guessed_word_map:
+                index_list = list(correctly_guessed_word_map[key])
+                for index in index_list:
+                    sorted_list.insert(index, key)
 
-        game_round += 1
+            if len(sorted_list) > 0:
+                print("""
+    {}""".format(sorted_list))
 
-    if user_guessed_word == word:
-        print("\nYou saved him! You correctly guessed {}".format(user_guessed_word))
-        pass
+            sorted_word = ""
+            for letter in sorted_list:
+                sorted_word += str(letter)
+
+        if sorted_word == word:
+            break
+        else:
+            game_round += 1
+
+    if hangman.guess(sorted_word):
+        print("\nYou saved him! You correctly guessed {}".format(sorted_word))
     else:
         print("\nSorry, you didn't save him!")
-        print("The city was: {}. You guessed {}".format(word, user_guessed_word))
+        print("The city was: {}, You guessed {}".format(word, user_guessed_word))
 
