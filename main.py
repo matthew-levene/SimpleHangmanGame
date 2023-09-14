@@ -10,8 +10,10 @@ from hangman import Hangman
 from generator import generate_word
 from matcher import find_matches
 from sort import sort_map
+from art import *
 
 if __name__ == '__main__':
+    print(text2art("HANGMAN", font="block"))
     print(
         """
     Welcome to Hangman!
@@ -20,7 +22,11 @@ if __name__ == '__main__':
     In order to save him, you must find out which city he committed the crime in"""
     )
 
-    word = generate_word().upper()
+    word, hint = generate_word()
+    word = word.upper()
+
+    print("""
+    Hint: {}""".format(hint))
 
     hangman = Hangman(word)
 
