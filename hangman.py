@@ -1,4 +1,3 @@
-import random
 
 
 class Hangman:
@@ -10,7 +9,7 @@ class Hangman:
         return letter in self.word
 
     def guess(self, guess_word):
-        return guess_word in self.word
+        return guess_word == self.word
 
 
     def draw_left_right_leg(self):
@@ -60,11 +59,10 @@ class Hangman:
         |""", end="")
     def draw_gallow_stand(self):
         print("""
-        ________________""", end="")
+        ________________\n""", end="")
 
 
     def draw_hangman(self):
-        hangman_complete = False
         self.num_wrong_guesses += 1
         if self.num_wrong_guesses == 1:
             self.draw_gallow_stand()
@@ -123,6 +121,11 @@ class Hangman:
             self.draw_left_right_leg()
             self.draw_post()
             self.draw_gallow_stand()
+
+        return self.hangman_complete()
+
+    def hangman_complete(self):
+        return self.num_wrong_guesses == 10
 
 
 

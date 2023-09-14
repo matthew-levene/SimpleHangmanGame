@@ -1,11 +1,11 @@
 # Hangman Game
 #
 # Basic hangman game where it takes a single letter as input from the user each round
-# Number of rounds is determined by length of word times by 2
+# Number of rounds is 10 -- Which is the number of ascii hangman parts drawn until the game ends
 # If the letter is not in the list, a piece of the hangman will be drawn
 #
-# The progress of the hangman will depend on the number of word length
-# e.g. the more characters in the word, the longer it takes to draw.
+#
+
 from hangman import Hangman
 from generator import generate_word
 from matcher import find_matches
@@ -19,8 +19,6 @@ if __name__ == '__main__':
     Our hangman friend has committed a crime in a renown capital city.
     In order to save him, you must find out which city he committed the crime in"""
     )
-
-    game_round = 0
 
     word = generate_word().upper()
 
@@ -37,10 +35,7 @@ if __name__ == '__main__':
         x: [] for x in word
     }
 
-    # While the round is less than the word times by 2
-    max_rounds = len(word) * 2
-    while game_round < max_rounds:
-
+    while True:
         # Get the input from the user
         letter = input(
             """
@@ -53,7 +48,10 @@ if __name__ == '__main__':
             print(
                 """
     Letter {} was not found""".format(letter))
-            hangman.draw_hangman()
+            is_hangman_complete = hangman.draw_hangman()
+
+            if is_hangman_complete:
+                break
         else:
             # For each letter at given index
             for letter_index in range(len(word)):
@@ -76,11 +74,9 @@ if __name__ == '__main__':
 
         if sorted_word == word:
             break
-        else:
-            game_round += 1
 
     if hangman.guess(sorted_word):
-        print("\nYou saved him! You correctly guessed {}".format(sorted_word))
+        print("\n\nYou saved him! You correctly guessed {}".format(sorted_word))
     else:
         print("\nSorry, you didn't save him!")
         print("The city was: {}, You guessed {}".format(word, user_guessed_word))
