@@ -9,6 +9,7 @@
 from hangman import Hangman
 from generator import generate_word
 from matcher import find_matches
+from sort import sort_map
 
 if __name__ == '__main__':
     print(
@@ -62,11 +63,7 @@ if __name__ == '__main__':
                     find_matches(letter, word, correctly_guessed_word_map)
 
             # sort the map
-            sorted_list = []
-            for key in correctly_guessed_word_map:
-                index_list = list(correctly_guessed_word_map[key])
-                for index in index_list:
-                    sorted_list.insert(index, key)
+            sorted_list = sort_map(correctly_guessed_word_map)
 
             if len(sorted_list) > 0:
                 print("""
