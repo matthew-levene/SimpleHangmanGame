@@ -53,6 +53,7 @@ if __name__ == '__main__':
             print(
                 """
     Letter {} was not found""".format(letter))
+            hangman.draw_hangman()
         else:
             # For each letter at given index
             for letter_index in range(len(word)):
