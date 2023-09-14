@@ -8,7 +8,7 @@
 # e.g. the more characters in the word, the longer it takes to draw.
 from hangman import Hangman
 from generator import generate_word
-from validator import find_matches
+from matcher import find_matches
 
 if __name__ == '__main__':
     print(
